@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice</title>
+  <style>
+    :root {
+      --border-color: #d1d5db;
+      --bg-header: #f8fafc;
+      --text-color: #1e293b;
+      --primary-btn: #2563eb;
+      --primary-btn-hover: #1d4ed8;
+      --danger-btn: #dc2626;
+      --danger-btn-hover: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      color: var(--text-color);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    th {
+      background-color: var(--bg-header);
+      text-align: left;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    input[type="number"]:focus {
+      outline: 2px solid var(--primary-btn);
+      border-color: transparent;
+    }
+
+    input[readonly] {
+      background-color: #f8fafc;
+      color: #64748b;
+    }
+
+    .subtotal-cell {
+      font-weight: 600;
+      font-size: 14px;
+      text-align: right;
+    }
+
+    .actions-cell {
+      text-align: center;
+      width: 50px;
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      color: var(--danger-btn);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 4px 8px;
+    }
+
+    .btn-delete:hover {
+      color: var(--danger-btn-hover);
+    }
+
+    .controls {
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 9px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-add {
+      background-color: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-add:hover {
+      background-color: #cbd5e1;
+    }
+
+    .btn-submit {
+      background-color: var(--primary-btn);
+      color: #ffffff;
+      padding: 12px 24px;
+      font-size: 15px;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-btn-hover);
+    }
+
+    .footer-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 40px;
+      padding-top: 20px;
+    }
+
+    .signature-container {
+      width: 350px;
+    }
+
+    .signature-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 35px;
+    }
+
+    .signature-line {
+      border-bottom: 1px solid #000;
+      width: 100%;
+    }
+
+    .grand-total-container {
+      text-align: right;
+    }
+
+    .grand-total-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .grand-total-amount {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .form-actions {
+      margin-top: 30px;
+      text-align: right;
+    }
+
+    #status-message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 4px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .status-success {
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .status-error {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .controls, .actions-cell, th:last-child, .form-actions {
+        display: none !important;
+      }
+      input {
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Invoice</h1>
+
+    <form id="invoice-form">
+      <div class="table-container">
+        <table id="invoice-table">
+          <thead>
+            <tr>
+              <th>Event ID</th>
+              <th>Program Name</th>
+              <th>Event Date</th>
+              <th>SP Name</th>
+              <th style="width: 100px;">Hours</th>
+              <th style="width: 100px;">Rate</th>
+              <th style="width: 120px; text-align: right;">Subtotal</th>
+              <th class="actions-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- Dynamic rows will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="btn btn-add" id="add-row-btn">+ Add Row</button>
+      </div>
+
+      <div class="footer-section">
+        <div class="signature-container">
+          <div class="signature-label">Signature</div>
+          <div class="signature-line">__________________________________________</div>
+        </div>
+        <div class="grand-total-container">
+          <div class="grand-total-label">Grand Total</div>
+          <div class="grand-total-amount" id="grand-total-display">$0.00</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-submit" id="submit-btn">Submit Invoice</button>
+      </div>
+
+      <div id="status-message"></div>
+    </form>
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwl9uY4rVEfz6V_wylqh-4rQU-nw01S15SURjj-sRP9DqOStQuOFd7AP76QbHg-U0NH/exec";
+    
+    const tableBody = document.getElementById('table-body');
+    const addRowBtn = document.getElementById('add-row-btn');
+    const grandTotalDisplay = document.getElementById('grand-total-display');
+    const invoiceForm = document.getElementById('invoice-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const statusMessage = document.getElementById('status-message');
+
+    function createRow() {
+      const tr = document.createElement('tr');
+      tr.className = 'invoice-row';
+      tr.innerHTML = `
+        <td><input type="text" name="eventId" required /></td>
+        <td><input type="text" name="programName" required /></td>
+        <td><input type="date" name="eventDate" required /></td>
+        <td><input type="text" name="spName" required /></td>
+        <td><input type="number" name="eventHours" step="0.25" min="0" value="0" class="input-hours" required /></td>
+        <td><input type="number" name="rate" value="25" class="input-rate" readonly /></td>
+        <td class="subtotal-cell">$<span class="row-subtotal">0.00</span></td>
+        <td class="actions-cell"><button type="button" class="btn-delete" title="Remove Row">&times;</button></td>
+      `;
+
+      const hoursInput = tr.querySelector('.input-hours');
+      const rateInput = tr.querySelector('.input-rate');
+      const deleteBtn = tr.querySelector('.btn-delete');
+
+      hoursInput.addEventListener('input', () => updateRowSubtotal(tr));
+      rateInput.addEventListener('input', () => updateRowSubtotal(tr));
+      
+      deleteBtn.addEventListener('click', () => {
+        if (tableBody.children.length > 1) {
+          tr.remove();
+          calculateGrandTotal();
+        }
+      });
+
+      return tr;
+    }
+
+    function updateRowSubtotal(row) {
+      const hours = parseFloat(row.querySelector('.input-hours').value) || 0;
+      const rate = parseFloat(row.querySelector('.input-rate').value) || 0;
+      const subtotal = hours * rate;
+      row.querySelector('.row-subtotal').textContent = subtotal.toFixed(2);
+      calculateGrandTotal();
+    }
+
+    function calculateGrandTotal() {
+      let total = 0;
+      const rows = tableBody.querySelectorAll('.invoice-row');
+      rows.forEach(row => {
+        const hours = parseFloat(row.querySelector('.input-hours').value) || 0;
+        const rate = parseFloat(row.querySelector('.input-rate').value) || 0;
+        total += (hours * rate);
+      });
+      grandTotalDisplay.textContent = `$${total.toFixed(2)}`;
+      return total;
+    }
+
+    addRowBtn.addEventListener('click', () => {
+      const newRow = createRow();
+      tableBody.appendChild(newRow);
+    });
+
+    invoiceForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      statusMessage.style.display = 'none';
+
+      const rows = tableBody.querySelectorAll('.invoice-row');
+      const items = [];
+      let grandTotal = 0;
+
+      rows.forEach(row => {
+        const hours = parseFloat(row.querySelector('input[name="eventHours"]').value) || 0;
+        const rate = parseFloat(row.querySelector('input[name="rate"]').value) || 0;
+        const subtotal = hours * rate;
+        grandTotal += subtotal;
+
+        items.push({
+          eventId: row.querySelector('input[name="eventId"]').value,
+          programName: row.querySelector('input[name="programName"]').value,
+          eventDate: row.querySelector('input[name="eventDate"]').value,
+          spName: row.querySelector('input[name="spName"]').value,
+          eventHours: hours,
+          rate: rate,
+          subtotal: subtotal
+        });
+      });
+
+      const payload = {
+        items: items,
+        grandTotal: grandTotal
+      };
+
+      try {
+        const response = await fetch(GAS_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          showStatus('Invoice submitted successfully!', 'success');
+          invoiceForm.reset();
+          tableBody.innerHTML = '';
+          tableBody.appendChild(createRow());
+          calculateGrandTotal();
+        } else {
+          showStatus(`Error: ${result.message}`, 'error');
+        }
+      } catch (err) {
+        showStatus(`Submission failed: ${err.message}`, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Invoice';
+      }
+    });
+
+    function showStatus(text, type) {
+      statusMessage.textContent = text;
+      statusMessage.className = type === 'success' ? 'status-success' : 'status-error';
+      statusMessage.style.display = 'block';
+    }
+
+    // Initialize with one row
+    tableBody.appendChild(createRow());
+  </script>
+</body>
+</html>
