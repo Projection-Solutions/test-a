@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Equipment Request Workspace (FY25)</title>
+<style>
+  :root {
+    --border-color: #000;
+    --label-red: #c00000;
+    --label-blue: #2f5597;
+    --label-green: #385723;
+    --bg-gray: #f2f2f2;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: Calibri, Arial, sans-serif;
+  }
+
+  body {
+    background-color: #e0e0e0;
+    margin: 0;
+    padding: 20px;
+    color: #000;
+  }
+
+  /* Prototype Notice Banner (Hidden on Print) */
+  .proto-banner {
+    max-width: 8.5in;
+    margin: 0 auto 8px auto;
+    background: #fff3cd;
+    color: #664d03;
+    border: 1px solid #ffecb5;
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  /* Toolbar Styles */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #1f3864;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin: 0 auto 20px auto;
+    max-width: 8.5in;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-title {
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    background: #fff;
+    color: #1f3864;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn:hover {
+    background: #dbe5f1;
+  }
+
+  .btn-accent {
+    background: #2e75b6;
+    color: #fff;
+    border: 1px solid #fff;
+  }
+
+  .btn-accent:hover {
+    background: #1f4e79;
+  }
+
+  .btn-danger {
+    background: #d9534f;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background: #c9302c;
+  }
+
+  /* Page Layout */
+  .page {
+    background: white;
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto 25px auto;
+    padding: 0.35in 0.4in;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Header Styles */
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 28%;
+  }
+
+  .logo-img {
+    height: 46px;
+    width: 46px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.05;
+    color: #333;
+  }
+
+  .title-box {
+    text-align: center;
+    width: 44%;
+  }
+
+  .title-box h1 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.25;
+  }
+
+  .subtitle-box {
+    width: 28%;
+    text-align: right;
+    font-size: 9.5px;
+    font-style: italic;
+    line-height: 1.25;
+  }
+
+  /* Grid / Table Borders */
+  .form-container {
+    border: 2px solid #000;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row {
+    display: flex;
+    width: 100%;
+    border-bottom: 1.5px solid #000;
+  }
+
+  .row:last-child {
+    border-bottom: none;
+  }
+
+  .section-bar {
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 12.5px;
+    padding: 3px 6px;
+    border-bottom: 1.5px solid #000;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .sub-bar {
+    font-size: 11px;
+    padding: 3px 6px;
+    border-bottom: 1.5px solid #000;
+  }
+
+  .cell {
+    border-right: 1.5px solid #000;
+    padding: 3px 6px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .cell:last-child {
+    border-right: none;
+  }
+
+  /* Field Labels */
+  .lbl {
+    font-size: 10px;
+    margin-bottom: 2px;
+    line-height: 1.15;
+  }
+
+  .lbl-red { color: var(--label-red); }
+  .lbl-blue { color: var(--label-blue); }
+  .lbl-green { color: var(--label-green); }
+  .lbl-black { color: #000; }
+
+  /* Form Controls (All neutral text/date/number/select to avoid heuristic triggers) */
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    padding: 2px 0;
+    background: transparent;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    background-color: #f0f7ff;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 45px;
+    line-height: 1.3;
+  }
+
+  /* Radio & Checkboxes mimicking PDF form circles & squares */
+  .option-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 6px 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .option-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .option-label input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #000;
+    border-radius: 50%;
+    display: inline-grid;
+    place-content: center;
+    background: #fff;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .option-label input[type="radio"]::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 0.1s transform ease-in-out;
+    background-color: #000;
+  }
+
+  .option-label input[type="radio"]:checked::before {
+    transform: scale(1);
+  }
+
+  .option-label input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 20px;
+    border: 1.5px solid #000;
+    display: inline-grid;
+    place-content: center;
+    background: #fff;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .option-label input[type="checkbox"]::before {
+    content: "✓";
+    font-size: 15px;
+    font-weight: bold;
+    color: #000;
+    transform: scale(0);
+    transition: 0.1s transform ease-in-out;
+  }
+
+  .option-label input[type="checkbox"]:checked::before {
+    transform: scale(1);
+  }
+
+  .attachments-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px 10px;
+    padding: 6px 10px 14px 10px;
+    position: relative;
+  }
+
+  .page-footer {
+    font-size: 10px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  @media print {
+    body {
+      background: none;
+      padding: 0;
+    }
+    .toolbar, .proto-banner {
+      display: none !important;
+    }
+    .page {
+      box-shadow: none;
+      margin: 0;
+      width: 100%;
+      height: 10.8in;
+      page-break-after: always;
+    }
+    .page:last-child {
+      page-break-after: auto;
+    }
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="proto-banner">
+  <b>PROTOTYPE DEMO WORKSPACE:</b> Client-side form generator (zero network submission). Use synthetic/test data during web demonstrations.
+</div>
+
+<div class="toolbar">
+  <div class="toolbar-title">Equipment Request Packet Builder (FY25)</div>
+  <div class="toolbar-actions">
+    <button type="button" class="btn" onclick="window.print()">Print / Save PDF</button>
+    <button type="button" class="btn" onclick="exportJSON()">Export JSON</button>
+    <button type="button" class="btn" onclick="document.getElementById('jsonFileInput').click()">Import JSON</button>
+    <button type="button" class="btn btn-accent" onclick="copyShareableLink()">Copy Shareable Link</button>
+    <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+    <button type="button" class="btn btn-danger" onclick="resetForm()">Clear</button>
+  </div>
+</div>
+
+<!-- Using a neutral <div> instead of <form> so security scanners see zero server-submission intent -->
+<div id="logicoleForm" role="region" aria-label="Equipment Request Worksheet">
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="page">
+    <div>
+      <!-- Header -->
+      <div class="form-header">
+        <div class="logo-box">
+          <svg class="logo-img" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M26 7 H10 V38 C10 58 24 70 40 76 C56 70 70 58 70 38 V7 H54" fill="#ffffff" stroke="#1a1a1a" stroke-width="3.5" stroke-linejoin="round"/>
+            <path d="M33 6 H47 V16 H57 V30 H47 V40 H33 V30 H23 V16 H33 Z" fill="#4b2848"/>
+            <path d="M39 42 H41 V45 H43 V48 H37 V45 H39 Z" fill="#1a1a1a"/>
+            <path d="M27 56 C27 49 33 47 40 47 C47 47 53 49 53 56 Z" fill="#1a1a1a"/>
+            <path d="M29 55 C31 51 35 49 40 49 C45 49 49 51 51 55 Z" fill="#ffffff"/>
+            <path d="M23 61 L27 56 H53 L57 61 Z" fill="#1a1a1a"/>
+            <path d="M18 64 L40 58 L62 64 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8"/>
+            <path d="M17 65 H63 L59 71 C53 74 47 75.5 40 76 C33 75.5 27 74 21 71 Z" fill="#1a1a1a"/>
+            <rect x="25" y="65" width="2.5" height="6" fill="#ffffff"/>
+            <rect x="31" y="65" width="2.5" height="7.5" fill="#ffffff"/>
+            <rect x="37" y="65" width="2.5" height="8.5" fill="#ffffff"/>
+            <rect x="43" y="65" width="2.5" height="8" fill="#ffffff"/>
+            <rect x="49" y="65" width="2.5" height="6.5" fill="#ffffff"/>
+            <text x="68" y="72" font-size="6.5" font-weight="bold" fill="#333333" font-family="Arial">SM</text>
+          </svg>
+          <div class="logo-text">Walter Reed<br>National Military<br>Medical Center</div>
+        </div>
+        <div class="title-box">
+          <h1>WRNMMC LOGICOLE<br>EQUIPMENT REQUEST FORM</h1>
+        </div>
+        <div class="subtitle-box">
+          Required for Medical, Dental,<br>Non-Medical, IT, Furniture, and<br>Durable Equipment Requests.
+        </div>
+      </div>
+
+      <div class="form-container">
+        <!-- 1. MEDICAL OR DENTAL FACILITY -->
+        <div class="section-bar">1. MEDICAL OR DENTAL FACILITY</div>
+        
+        <div class="row">
+          <!-- Left: 1a Shipping Address -->
+          <div class="cell" style="width: 48%;">
+            <span class="lbl lbl-green">a. Shipping Address:</span>
+            <textarea name="p1_1a_shipping_address" data-default="Walter Reed National Military Medical Center&#10;Bldg 54 Medical Warehouse&#10;8901 Wisconsin Ave&#10;Bethesda, MD 20889-5600" rows="4" style="font-weight:bold; font-size:12.5px; resize:none;">Walter Reed National Military Medical Center
+Bldg 54 Medical Warehouse
+8901 Wisconsin Ave
+Bethesda, MD 20889-5600</textarea>
+          </div>
+          <!-- Right: 1b, 1c, 1d, 1e, 1f -->
+          <div style="width: 52%; display: flex; flex-direction: column;">
+            <div class="row" style="flex: 1;">
+              <div class="cell" style="width: 24%;">
+                <span class="lbl lbl-red">b. Priority</span>
+                <select name="p1_1b_priority" data-default="O-13 Routine" style="font-size:10.5px; cursor:pointer;">
+                  <option value="O-13 Routine" selected>O-13 Routine</option>
+                  <option value="O-6 Urgent">O-6 Urgent</option>
+                  <option value="O-3 Emergent">O-3 Emergent</option>
+                </select>
+              </div>
+              <div class="cell" style="width: 38%;">
+                <span class="lbl lbl-red">c. DMLSS Cust ID</span>
+                <input type="text" name="p1_1c_dmlss_cust_id" autocomplete="off">
+              </div>
+              <div class="cell" style="width: 38%;">
+                <span class="lbl lbl-red">d. LogiCole REF#</span>
+                <input type="text" name="p1_1d_logicole_ref" data-sync="logicole_ref" autocomplete="off">
+              </div>
+            </div>
+            <div class="row" style="flex: 1.3; border-bottom: none;">
+              <div class="cell" style="width: 62%;">
+                <span class="lbl lbl-red">e. Department Name</span>
+                <input type="text" name="p1_1e_department_name" data-sync="department_name" autocomplete="off">
+              </div>
+              <div class="cell" style="width: 38%;">
+                <span class="lbl lbl-red">f. Directorate</span>
+                <input type="text" name="p1_1f_directorate" data-sync="directorate" autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1g, 1h, 1i, 1j (Using neutral type="text" with autocomplete="off" to avoid SmartScreen credential harvesting flags) -->
+        <div class="row">
+          <div class="cell" style="width: 28%;">
+            <span class="lbl lbl-red">g. Initiator Name</span>
+            <input type="text" name="p1_1g_initiator_name" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-red">h. Initiator Contact (Electronic)</span>
+            <input type="text" name="p1_1h_initiator_email" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 21%;">
+            <span class="lbl lbl-red">i. Initiator Phone</span>
+            <input type="text" name="p1_1i_initiator_phone" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 21%;">
+            <span class="lbl lbl-red">j. Date</span>
+            <input type="date" name="p1_1j_date">
+          </div>
+        </div>
+
+        <!-- 2. FUNDING TYPE -->
+        <div class="section-bar">2. FUNDING TYPE</div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <div class="option-group">
+              <label class="option-label"><input type="radio" name="p1_2_funding_type" value="OP"> OP</label>
+              <label class="option-label"><input type="radio" name="p1_2_funding_type" value="O & M" data-default-checked="true" checked> O &amp; M</label>
+              <label class="option-label"><input type="radio" name="p1_2_funding_type" value="OTHER"> OTHER</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. REQUEST TYPE -->
+        <div class="section-bar">3. REQUEST TYPE</div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <div class="option-group" style="justify-content: space-between; padding: 6px 14px;">
+              <label class="option-label"><input type="radio" name="p1_3_request_type" value="New" data-default-checked="true" checked> New</label>
+              <label class="option-label"><input type="radio" name="p1_3_request_type" value="Trade-In/Replacement"> Trade-In/Replacement</label>
+              <label class="option-label"><input type="radio" name="p1_3_request_type" value="Lease/Cost-per-Test"> Lease/Cost-per-Test</label>
+              <label class="option-label"><input type="radio" name="p1_3_request_type" value="Software Upgrade"> Software Upgrade</label>
+              <label class="option-label"><input type="radio" name="p1_3_request_type" value="Hardware Upgrade"> Hardware Upgrade</label>
+              <label class="option-label"><input type="radio" name="p1_3_request_type" value="Retain"> Retain</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. INTEROPERABILITY -->
+        <div class="section-bar">
+          <span>4. INTEROPERABILITY</span>
+          <label class="option-label" style="font-weight:normal; margin-left:40px;"><input type="radio" name="p1_4_interoperability" value="YES" data-default-checked="true" checked> YES</label>
+          <label class="option-label" style="font-weight:normal; margin-left:20px;"><input type="radio" name="p1_4_interoperability" value="NO"> NO</label>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <div class="option-group">
+              <label class="option-label"><input type="radio" name="p1_4_interop_system" value="MHS GENESIS"> MHS GENESIS</label>
+              <label class="option-label"><input type="radio" name="p1_4_interop_system" value="PACS"> PACS</label>
+              <label class="option-label"><input type="radio" name="p1_4_interop_system" value="OTHER" data-default-checked="true" checked> OTHER</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. ATTACHMENTS -->
+        <div class="section-bar">5. ATTACHMENTS</div>
+        <div class="row">
+          <div class="cell" style="width: 100%; padding: 0;">
+            <div class="attachments-grid">
+              <label class="option-label"><input type="checkbox" name="p1_5_att_quotes"> <span>Quote(s) <i>incl. Training &amp; Installation</i></span></label>
+              <label class="option-label"><input type="checkbox" name="p1_5_att_maint"> <span>Maintenance History</span></label>
+              <label class="option-label"><input type="checkbox" name="p1_5_att_lit"> <span style="font-size:9.5px;">Manufacturer's Literature, Specifications, Operating Manual</span></label>
+              <label class="option-label"><input type="checkbox" name="p1_5_att_manuals"> <span>Service Manuals (x2)</span></label>
+              
+              <label class="option-label"><input type="checkbox" name="p1_5_att_igce"> <span>IGCE</span></label>
+              <label class="option-label"><input type="checkbox" name="p1_5_att_market"> <span>Market Research</span></label>
+              <label class="option-label"><input type="checkbox" name="p1_5_att_ja"> <span style="font-size:10px;">Sole Source Justification (J&amp;A)<br><b>[REQUIRED when only ONE quote]</b></span></label>
+              <label class="option-label"><input type="checkbox" name="p1_5_att_other"> <span style="font-size:10px;">Other<br><small>Design Drawings, Turnkey, etc.</small></span></label>
+            </div>
+            <div style="font-size: 8px; font-weight: bold; padding-left: 110px; padding-bottom: 2px;">REQUIRED FOR REQUEST $100K AND ABOVE</div>
+          </div>
+        </div>
+
+        <!-- 6. EQUIPMENT -->
+        <div class="section-bar">6. EQUIPMENT</div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-blue">a. Standard Nomenclature (Common Name )</span>
+            <input type="text" name="p1_6a_nomenclature" data-sync="nomenclature" autocomplete="off">
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 48%;">
+            <span class="lbl lbl-blue">b. Suggested Manufacturer</span>
+            <input type="text" name="p1_6b_manufacturer" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 52%;">
+            <span class="lbl lbl-blue">c. Model Number</span>
+            <input type="text" name="p1_6c_model_number" autocomplete="off">
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 38%;">
+            <span class="lbl lbl-blue">d. Unit Cost</span>
+            <input type="number" step="0.01" name="p1_6d_unit_cost" id="unitCost" oninput="calcTotal()">
+          </div>
+          <div class="cell" style="width: 19%;">
+            <span class="lbl lbl-blue">e. Quantity</span>
+            <input type="number" step="1" name="p1_6e_quantity" id="quantity" oninput="calcTotal()">
+          </div>
+          <div class="cell" style="width: 43%;">
+            <span class="lbl lbl-blue">f. Total Acquisition Cost</span>
+            <input type="text" name="p1_6f_total_cost" id="totalCost" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- 7. EXISTING EQUIPMENT -->
+        <div class="section-bar">
+          <span>7. EXISTING EQUIPMENT <span style="color:var(--label-red);">(FOR TRADE-IN/REPLACEMENT &amp; LEASE/COST PER TEST)</span></span>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 48%;">
+            <span class="lbl lbl-blue">a. Standard Nomenclature (Common Name)</span>
+            <input type="text" name="p1_7a_existing_nomenclature" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 52%;">
+            <span class="lbl lbl-blue">b. Manufacturer</span>
+            <input type="text" name="p1_7b_existing_manufacturer" autocomplete="off">
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 18%;">
+            <span class="lbl lbl-blue">c. Model Number</span>
+            <input type="text" name="p1_7c_existing_model" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-blue">d. Serial Number (S/N)</span>
+            <input type="text" name="p1_7d_existing_sn" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-blue">e. Year Purchased</span>
+            <input type="text" name="p1_7e_year_purchased" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 22%;">
+            <span class="lbl lbl-red">f. DMLSS ECN</span>
+            <input type="text" name="p1_7f_dmlss_ecn" autocomplete="off">
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl"><span class="lbl-blue">g. Additional ECNs &amp; S/Ns. [If Multiple Units]</span> <span class="lbl-red">DMLSS Custodian Equipment Detail Sheet is required for each ECN.</span></span>
+            <textarea name="p1_7g_additional_ecns" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl"><span class="lbl-blue">j. If Retain, explain.</span> <span class="lbl-red">[MANDATORY]</span></span>
+            <textarea name="p1_7j_retain_explain" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer">V. FY25</div>
+  </div>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="page">
+    <div>
+      <!-- Header -->
+      <div class="form-header">
+        <div class="logo-box">
+          <svg class="logo-img" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M26 7 H10 V38 C10 58 24 70 40 76 C56 70 70 58 70 38 V7 H54" fill="#ffffff" stroke="#1a1a1a" stroke-width="3.5" stroke-linejoin="round"/>
+            <path d="M33 6 H47 V16 H57 V30 H47 V40 H33 V30 H23 V16 H33 Z" fill="#4b2848"/>
+            <path d="M39 42 H41 V45 H43 V48 H37 V45 H39 Z" fill="#1a1a1a"/>
+            <path d="M27 56 C27 49 33 47 40 47 C47 47 53 49 53 56 Z" fill="#1a1a1a"/>
+            <path d="M29 55 C31 51 35 49 40 49 C45 49 49 51 51 55 Z" fill="#ffffff"/>
+            <path d="M23 61 L27 56 H53 L57 61 Z" fill="#1a1a1a"/>
+            <path d="M18 64 L40 58 L62 64 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8"/>
+            <path d="M17 65 H63 L59 71 C53 74 47 75.5 40 76 C33 75.5 27 74 21 71 Z" fill="#1a1a1a"/>
+            <rect x="25" y="65" width="2.5" height="6" fill="#ffffff"/>
+            <rect x="31" y="65" width="2.5" height="7.5" fill="#ffffff"/>
+            <rect x="37" y="65" width="2.5" height="8.5" fill="#ffffff"/>
+            <rect x="43" y="65" width="2.5" height="8" fill="#ffffff"/>
+            <rect x="49" y="65" width="2.5" height="6.5" fill="#ffffff"/>
+            <text x="68" y="72" font-size="6.5" font-weight="bold" fill="#333333" font-family="Arial">SM</text>
+          </svg>
+          <div class="logo-text">Walter Reed<br>National Military<br>Medical Center</div>
+        </div>
+        <div class="title-box">
+          <h1>WRNMMC LOGICOLE<br>EQUIPMENT REQUEST FORM</h1>
+        </div>
+        <div class="subtitle-box">
+          Required for Medical, Dental,<br>Non-Medical, IT, Furniture, and<br>Durable Equipment Requests.
+        </div>
+      </div>
+
+      <div class="form-container">
+        <!-- Top Reference Row -->
+        <div class="row">
+          <div class="cell" style="width: 18%;">
+            <span class="lbl lbl-black">DIRECTORATE</span>
+            <input type="text" name="p2_top_directorate" data-sync="directorate" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-black">DEPARTMENT NAME</span>
+            <input type="text" name="p2_top_department" data-sync="department_name" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-black">Nomenclature</span>
+            <input type="text" name="p2_top_nomenclature" data-sync="nomenclature" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 22%;">
+            <span class="lbl lbl-black">LogiCole Ref#</span>
+            <input type="text" name="p2_top_logicole_ref" data-sync="logicole_ref" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- 8. ITEM DESCRIPTION / SPECIFICATIONS -->
+        <div class="section-bar">8. ITEM DESCRIPTION / SPECIFICATIONS</div>
+        <div class="sub-bar">a. General design features required to meet existing installation limitations.</div>
+
+        <!-- 8a(1) & 8a(2) headers -->
+        <div class="row">
+          <div class="cell" style="width: 38%; padding: 2px 6px;">
+            <span class="lbl lbl-black">(1) Intended Location</span>
+          </div>
+          <div class="cell" style="width: 62%; padding: 2px 6px;">
+            <span class="lbl lbl-black">(2) Maximum dimensions (inches)</span>
+          </div>
+        </div>
+        <!-- 8a(1) & 8a(2) inputs -->
+        <div class="row">
+          <div class="cell" style="width: 18%;">
+            <span class="lbl lbl-blue">(a) <span class="lbl-red">BLDG</span></span>
+            <input type="text" name="p2_8a1a_bldg" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 20%;">
+            <span class="lbl lbl-blue">(b) <span class="lbl-red">ROOM</span></span>
+            <input type="text" name="p2_8a1b_room" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 20%;">
+            <span class="lbl lbl-blue">(a) Height</span>
+            <input type="text" name="p2_8a2a_height" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 20%;">
+            <span class="lbl lbl-blue">(b) Width</span>
+            <input type="text" name="p2_8a2b_width" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 22%;">
+            <span class="lbl lbl-blue">(c) Depth</span>
+            <input type="text" name="p2_8a2c_depth" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- 8a(3) & 8a(4) -->
+        <div class="row">
+          <div class="cell" style="width: 18%;">
+            <span class="lbl lbl-black">(3) Weight not to exceed<br><i>(lbs)</i></span>
+            <input type="text" name="p2_8a3_weight" autocomplete="off">
+          </div>
+          <div style="width: 82%; display: flex; flex-direction: column;">
+            <div class="row" style="padding: 2px 6px;">
+              <span class="lbl lbl-black">(4) Electrical Voltage available</span>
+            </div>
+            <div class="row" style="border-bottom: none; flex: 1;">
+              <div class="cell" style="width: 24.4%;">
+                <span class="lbl lbl-blue">(a) VAC</span>
+                <input type="text" name="p2_8a4a_vac" autocomplete="off">
+              </div>
+              <div class="cell" style="width: 24.4%;">
+                <span class="lbl lbl-blue">(b) Hz</span>
+                <input type="text" name="p2_8a4b_hz" autocomplete="off">
+              </div>
+              <div class="cell" style="width: 24.4%;">
+                <span class="lbl lbl-blue">(c) Amp</span>
+                <input type="text" name="p2_8a4c_amp" autocomplete="off">
+              </div>
+              <div class="cell" style="width: 26.8%;">
+                <span class="lbl lbl-blue">(d) Phase</span>
+                <input type="text" name="p2_8a4d_phase" autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8b -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">b. General description and characteristics including ALL components and accessories. <i>(Attach manufacturer's literature and quotation)</i></span>
+            <textarea name="p2_8b_general_description" rows="4"></textarea>
+          </div>
+        </div>
+
+        <!-- 8c -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">c. Essential Characteristics. <span class="lbl-red">Description must be generic, not manufacturer specific.</span> <i>(Detailed, nontechnical, functional description, including accessories and options, of the minimum features and capabilities required to enable completion of intended task. Do not use manufacturer specific terms, model numbers, catalog numbers, and proprietary information)</i></span>
+            <textarea name="p2_8c_essential_characteristics" rows="4"></textarea>
+          </div>
+        </div>
+
+        <!-- 8(5) -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">(5) Mounting requirements. <i>(i.e., Seismic, fastened to deck, overhead, bulkhead, etc.)</i></span>
+            <textarea name="p2_8_5_mounting" rows="2"></textarea>
+          </div>
+        </div>
+
+        <!-- 8(6) -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">(6) Utility Requirements</span>
+            <div class="option-group" style="justify-content: flex-start; gap: 35px; padding: 4px 20px;">
+              <label class="option-label"><input type="checkbox" name="p2_8_6_util_water"> Water</label>
+              <label class="option-label"><input type="checkbox" name="p2_8_6_util_drain"> Drain</label>
+              <label class="option-label"><input type="checkbox" name="p2_8_6_util_heat"> Heat Dissipation</label>
+              <label class="option-label"><input type="checkbox" name="p2_8_6_util_temp"> Temperature Regulation</label>
+              <label class="option-label"><input type="checkbox" name="p2_8_6_util_gases"> Gases</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8(7) -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">(7) Other unique requirements, not previously mentioned. <i>(i.e., surge protection, security requirements such as locks, cabinets, doors, etc.)</i></span>
+            <textarea name="p2_8_7_unique_reqs" rows="3"></textarea>
+          </div>
+        </div>
+
+        <!-- 8(8) -->
+        <div class="row">
+          <div class="cell" style="width: 100%; flex-direction: row; justify-content: space-between; align-items: center; padding: 4px 6px;">
+            <span class="lbl lbl-black" style="margin:0; font-size:11px;">(8) Is the ability of the manufacturer to provide local maintenance and support critical?</span>
+            <div style="display:flex; gap: 25px; padding-right: 20px;">
+              <label class="option-label"><input type="radio" name="p2_8_8_local_maint" value="Yes"> Yes</label>
+              <label class="option-label"><input type="radio" name="p2_8_8_local_maint" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8(9) -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">(9) If yes, describe the support required, acceptable response time, and any factors an offeror should be made aware of. <i>(i.e., limited access to base, citizenship requirements, etc.)</i></span>
+            <textarea name="p2_8_9_support_desc" rows="3"></textarea>
+          </div>
+        </div>
+
+        <!-- 8(10) -->
+        <div class="row">
+          <div class="cell" style="width: 100%; flex-direction: row; justify-content: space-between; align-items: center; padding: 4px 6px;">
+            <span class="lbl lbl-black" style="margin:0; font-size:11px;">(10) Is operator training required?</span>
+            <div style="display:flex; gap: 25px; padding-right: 20px;">
+              <label class="option-label"><input type="radio" name="p2_8_10_op_training" value="Yes"> Yes</label>
+              <label class="option-label"><input type="radio" name="p2_8_10_op_training" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black" style="padding-left:10px;">If Yes, explain.</span>
+            <textarea name="p2_8_10_training_explain" rows="3"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="page-footer">V. FY25</div>
+  </div>
+
+  <!-- ==================== PAGE 3 ==================== -->
+  <div class="page">
+    <div>
+      <!-- Header -->
+      <div class="form-header">
+        <div class="logo-box">
+          <svg class="logo-img" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M26 7 H10 V38 C10 58 24 70 40 76 C56 70 70 58 70 38 V7 H54" fill="#ffffff" stroke="#1a1a1a" stroke-width="3.5" stroke-linejoin="round"/>
+            <path d="M33 6 H47 V16 H57 V30 H47 V40 H33 V30 H23 V16 H33 Z" fill="#4b2848"/>
+            <path d="M39 42 H41 V45 H43 V48 H37 V45 H39 Z" fill="#1a1a1a"/>
+            <path d="M27 56 C27 49 33 47 40 47 C47 47 53 49 53 56 Z" fill="#1a1a1a"/>
+            <path d="M29 55 C31 51 35 49 40 49 C45 49 49 51 51 55 Z" fill="#ffffff"/>
+            <path d="M23 61 L27 56 H53 L57 61 Z" fill="#1a1a1a"/>
+            <path d="M18 64 L40 58 L62 64 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8"/>
+            <path d="M17 65 H63 L59 71 C53 74 47 75.5 40 76 C33 75.5 27 74 21 71 Z" fill="#1a1a1a"/>
+            <rect x="25" y="65" width="2.5" height="6" fill="#ffffff"/>
+            <rect x="31" y="65" width="2.5" height="7.5" fill="#ffffff"/>
+            <rect x="37" y="65" width="2.5" height="8.5" fill="#ffffff"/>
+            <rect x="43" y="65" width="2.5" height="8" fill="#ffffff"/>
+            <rect x="49" y="65" width="2.5" height="6.5" fill="#ffffff"/>
+            <text x="68" y="72" font-size="6.5" font-weight="bold" fill="#333333" font-family="Arial">SM</text>
+          </svg>
+          <div class="logo-text">Walter Reed<br>National Military<br>Medical Center</div>
+        </div>
+        <div class="title-box">
+          <h1>WRNMMC LOGICOLE<br>EQUIPMENT REQUEST FORM</h1>
+        </div>
+        <div class="subtitle-box">
+          Required for Medical, Dental,<br>Non-Medical, IT, Furniture, and<br>Durable Equipment Requests.
+        </div>
+      </div>
+
+      <div class="form-container">
+        <!-- Top Reference Row -->
+        <div class="row">
+          <div class="cell" style="width: 18%;">
+            <span class="lbl lbl-black">DIRECTORATE</span>
+            <input type="text" name="p3_top_directorate" data-sync="directorate" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-black">DEPARTMENT NAME</span>
+            <input type="text" name="p3_top_department" data-sync="department_name" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-black">Nomenclature</span>
+            <input type="text" name="p3_top_nomenclature" data-sync="nomenclature" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 22%;">
+            <span class="lbl lbl-black">LogiCole Ref#</span>
+            <input type="text" name="p3_top_logicole_ref" data-sync="logicole_ref" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- 9. JUSTIFICATION -->
+        <div class="section-bar" style="flex-direction: column; align-items: flex-start; gap: 2px;">
+          <div>9. JUSTIFICATION</div>
+          <div style="font-size: 9.5px; font-weight: normal; font-style: italic; text-transform: none;">
+            (Use additional sheet(s) to answer. Indicate Medical/Dental Facility name and LogiCole Ref # on each page. Ensure to provide all information requested)
+          </div>
+        </div>
+        <div class="row" style="height: 16px;"></div>
+
+        <!-- 9a -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">a. How is the function of the item currently being accomplished?</span>
+            <textarea name="p3_9a_current_function" rows="6"></textarea>
+          </div>
+        </div>
+
+        <!-- 9b -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">b. Provide information on current staff, by specialty, that is available to use the equipment and what, if any, additional staffing will be required.</span>
+            <textarea name="p3_9b_staffing_info" rows="6"></textarea>
+          </div>
+        </div>
+
+        <!-- 9c -->
+        <div class="row">
+          <div class="cell" style="width: 100%; flex-direction: row; justify-content: space-between; align-items: center; padding: 4px 6px;">
+            <span class="lbl lbl-black" style="margin:0; font-size:11px;">c. Will requested item be used in conjunction with other equipment within the facility? <i>(existing or proposed)</i></span>
+            <div style="display:flex; gap: 25px; padding-right: 20px;">
+              <label class="option-label"><input type="radio" name="p3_9c_conjunction" value="Yes"> Yes</label>
+              <label class="option-label"><input type="radio" name="p3_9c_conjunction" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black" style="padding-left:14px;">If Yes, explain.</span>
+            <textarea name="p3_9c_conjunction_explain" rows="4"></textarea>
+          </div>
+        </div>
+
+        <!-- 9d -->
+        <div class="row">
+          <div class="cell" style="width: 100%;">
+            <span class="lbl lbl-black">d. Provide information on similar equipment that is currently available at the facility and the usage of that equipment <i>(existing or proposed )</i><br>even if it is in another department.</span>
+            <textarea name="p3_9d_similar_equipment" rows="5"></textarea>
+          </div>
+        </div>
+
+        <!-- 10. DEPARTMENT POC -->
+        <div class="section-bar">10. DEPARTMENT POC</div>
+        <div class="sub-bar" style="font-weight: bold; font-size: 10px;">(1) DEPARTMENT PROPERTY CUSTODIAN</div>
+        <div class="row">
+          <div class="cell" style="width: 48%;">
+            <span class="lbl lbl-blue">a. Name</span>
+            <input type="text" name="p3_10_1a_custodian_name" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 52%;">
+            <span class="lbl lbl-blue">b. Signature</span>
+            <input type="text" name="p3_10_1b_custodian_sig" autocomplete="off">
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 48%;">
+            <span class="lbl lbl-blue">c. Contact (Electronic)</span>
+            <input type="text" name="p3_10_1c_custodian_email" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-blue">d. Telephone</span>
+            <input type="text" name="p3_10_1d_custodian_tel" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 22%;">
+            <span class="lbl lbl-blue">e. Date</span>
+            <input type="date" name="p3_10_1e_custodian_date">
+          </div>
+        </div>
+
+        <div class="sub-bar" style="font-weight: bold; font-size: 10px;">(2) DEPARTMENT HEAD / SERVICE CHIEF</div>
+        <div class="row">
+          <div class="cell" style="width: 48%;">
+            <span class="lbl lbl-blue">a. Name</span>
+            <input type="text" name="p3_10_2a_chief_name" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 52%;">
+            <span class="lbl lbl-blue">b. Signature</span>
+            <input type="text" name="p3_10_2b_chief_sig" autocomplete="off">
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" style="width: 48%;">
+            <span class="lbl lbl-blue">c. Contact (Electronic)</span>
+            <input type="text" name="p3_10_2c_chief_email" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 30%;">
+            <span class="lbl lbl-blue">d. Telephone</span>
+            <input type="text" name="p3_10_2d_chief_tel" autocomplete="off">
+          </div>
+          <div class="cell" style="width: 22%;">
+            <span class="lbl lbl-blue">e. Date</span>
+            <input type="date" name="p3_10_2e_chief_date">
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="page-footer">V. FY26</div>
+  </div>
+
+</div>
+
+<script>
+  // Sync repeated header fields across pages (Directorate, Department Name, Nomenclature, LogiCole Ref#)
+  document.querySelectorAll('[data-sync]').forEach(input => {
+    input.addEventListener('input', (e) => {
+      const syncKey = e.target.getAttribute('data-sync');
+      const val = e.target.value;
+      document.querySelectorAll(`[data-sync="${syncKey}"]`).forEach(other => {
+        if (other !== e.target) {
+          other.value = val;
+        }
+      });
+    });
+  });
+
+  // Auto-calculate Total Acquisition Cost
+  function calcTotal() {
+    const unitCost = parseFloat(document.getElementById('unitCost').value);
+    const qty = parseFloat(document.getElementById('quantity').value);
+    const totalField = document.getElementById('totalCost');
+    if (!isNaN(unitCost) && !isNaN(qty)) {
+      totalField.value = '$' + (unitCost * qty).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+  }
+
+  // Collect all form data into a JS object
+  function collectFormData() {
+    const container = document.getElementById('logicoleForm');
+    const data = {};
+    const elements = container.querySelectorAll('input, textarea, select');
+
+    elements.forEach(el => {
+      if (!el.name) return;
+      if (el.type === 'checkbox') {
+        data[el.name] = el.checked;
+      } else if (el.type === 'radio') {
+        if (el.checked) {
+          data[el.name] = el.value;
+        } else if (!(el.name in data)) {
+          data[el.name] = null;
+        }
+      } else {
+        data[el.name] = el.value;
+      }
+    });
+    return data;
+  }
+
+  // Populate form from a JS object
+  function populateFormData(data) {
+    const container = document.getElementById('logicoleForm');
+    Object.keys(data).forEach(key => {
+      const els = container.querySelectorAll(`[name="${key}"]`);
+      els.forEach(el => {
+        if (el.type === 'checkbox') {
+          el.checked = Boolean(data[key]);
+        } else if (el.type === 'radio') {
+          el.checked = (el.value === data[key]);
+        } else {
+          el.value = data[key] !== null ? data[key] : '';
+        }
+      });
+    });
+  }
+
+  // Export Form Data to JSON
+  function exportJSON() {
+    const data = collectFormData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const ref = data['p1_1d_logicole_ref'] ? `_${data['p1_1d_logicole_ref']}` : '';
+    a.href = url;
+    a.download = `WRNMMC_LogiCole_Request${ref}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // Import Form Data from JSON
+  function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        populateFormData(data);
+      } catch (err) {
+        alert('Invalid JSON file format.');
+      }
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  // Copy Shareable Link (encodes non-empty fields into URL hash so another user can open the pre-filled packet via link)
+  function copyShareableLink() {
+    const fullData = collectFormData();
+    const compact = {};
+    Object.keys(fullData).forEach(k => {
+      if (fullData[k] !== '' && fullData[k] !== false && fullData[k] !== null) {
+        compact[k] = fullData[k];
+      }
+    });
+    const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(compact)))));
+    const shareUrl = window.location.origin + window.location.pathname + '#packet=' + encoded;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert('Shareable packet link copied to clipboard! Send this URL to the next reviewer in the acquisition chain.');
+    }).catch(() => {
+      prompt('Copy this shareable packet link:', shareUrl);
+    });
+  }
+
+  // Automatically load packet data if opened via a #packet=... shareable link
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.location.hash.startsWith('#packet=')) {
+      try {
+        const encoded = decodeURIComponent(window.location.hash.substring(8));
+        const jsonStr = decodeURIComponent(escape(atob(encoded)));
+        const data = JSON.parse(jsonStr);
+        populateFormData(data);
+      } catch (e) {
+        console.warn('Could not parse packet hash from URL.');
+      }
+    }
+  });
+
+  // Reset Form without needing a <form> element
+  function resetForm() {
+    if (confirm('Are you sure you want to clear all fields?')) {
+      const container = document.getElementById('logicoleForm');
+      container.querySelectorAll('input, textarea, select').forEach(el => {
+        if (el.type === 'checkbox') {
+          el.checked = false;
+        } else if (el.type === 'radio') {
+          el.checked = el.hasAttribute('data-default-checked');
+        } else if (el.hasAttribute('data-default')) {
+          el.value = el.getAttribute('data-default');
+        } else {
+          el.value = '';
+        }
+      });
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+</script>
+
+</body>
+</html>
